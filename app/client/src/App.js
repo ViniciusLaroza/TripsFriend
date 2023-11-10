@@ -24,7 +24,8 @@ function App() {
       email: values.email,
       password: values.password,
     }).then((response) => {
-      console.log(response);
+      console.log(response.data);
+      localStorage.setItem('userId', response.data.userId);
     });
   };
 
