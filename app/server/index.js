@@ -22,7 +22,7 @@ app.post("/trips", (req, res) => {
           console.error('Erro ao inserir viagem: ' + err);
           res.status(500).json({ error: 'Erro interno do servidor' });
           return;
-        }
+        } 
       });
   });
 
@@ -38,10 +38,10 @@ app.get("/trips", (req, res) => {
     });
 });
 
-app.get("/tripviajantes/:trip_id", (req, res) => {
-    const trip_id = req.params.trip_id; // Obtenha o valor da viagem dos parâmetros da URL
+app.get("/tripviajantes/:tripId", (req, res) => {
+    const trip_id = req.params.tripId; // Obtenha o valor da viagem dos parâmetros da URL
 
-    db.query('SELECT users.nome FROM viajantes JOIN users ON viajantes.viajante_id = users.id WHERE viajantes.trip_id = ?',
+    db.query('SELECT users.nome FROM viajantes JOIN users ON viajantes.viajante_id = users.idusuarios WHERE viajantes.trip_id = ?',
         [trip_id],
         (err, result) => {
             if (err) {
@@ -55,13 +55,18 @@ app.get("/tripviajantes/:trip_id", (req, res) => {
     );
 });
 
-app.post("/trips/{tripId}/join", (req,res) => {
+app.post("/trips/:tripId/join", (req,res) => {
+    const trip_id = req.params.tripId;
+    const viajante_id = req.body.viajante_id;
+
     db.query('INSERT INTO viajantes (trip_id, viajante_id) values (?,?)',
     [trip_id,viajante_id],
     (err,result) => {
         if(err){
             console.log('Erro ao inserir viajantes' + err);
             return;
+        }else{
+            console.log('inserido com sucesso!')
         }
     });
 });

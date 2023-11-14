@@ -10,6 +10,15 @@ const CreateTrip = () => {
   const [cidade, setCidade] = useState('');
   const [localHospedagem, setLocalHospedagem] = useState('');
 
+
+  const initialValues = {
+    dataInicio: '',
+    dataFim: '',
+    país: '',
+    cidade: '',
+    localHospedagem: '',
+  };
+
   const handleCreateTrip = async () => {
     const criador = localStorage.getItem('userId');
     try {
@@ -21,8 +30,6 @@ const CreateTrip = () => {
         cidade: cidade,
         local_hospedagem: localHospedagem,
       });
-
-      console.log(response.data);
       // Lidar com a resposta conforme necessário (redirecionar, exibir mensagem, etc.)
     } catch (error) {
       console.error('Erro ao criar viagem:', error);
@@ -33,7 +40,10 @@ const CreateTrip = () => {
   return (
     <div className="container">
       <h1>Criar Viagem</h1>
-      <Formik>
+      <Formik
+      initialValues={initialValues}
+      onSubmit={handleCreateTrip}
+      >
         <Form className="login-form">
             <div className="form-field">
                 <label>Data de Início:</label>
@@ -60,7 +70,7 @@ const CreateTrip = () => {
                 <input type="text" value={localHospedagem} onChange={(e) => setLocalHospedagem(e.target.value)} />
             </div>
 
-            <button onClick={handleCreateTrip}>Criar Viagem</button>
+            <button type="submit">Criar Viagem</button>
         </Form>
       </Formik>
       
