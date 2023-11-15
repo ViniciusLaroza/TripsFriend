@@ -18,6 +18,17 @@ const TripList = () => {
       });
   }, []); 
 
+  const loadTrips = () => {
+    axios.get("http://localhost:3001/trips")
+      .then(response => {
+        setTrips(response.data);
+        
+      })
+      .catch(error => {
+        console.error('Erro ao obter a lista de viagens:', error);
+      });
+  }
+
   //rodando OKOKOK
   const joinTrip = (tripId) => {
     const userId = localStorage.getItem('userId'); 
@@ -25,7 +36,7 @@ const TripList = () => {
     // Faz a requisição para adicionar o usuário à viagem
     axios.post(`http://localhost:3001/trips/${tripId}/join`, { viajante_id: userId})
       .then(response => {
-        
+        loadTrips();
         // Atualiza o estado ou realiza outras ações conforme necessário
         console.log('Usuário adicionado à viagem com sucesso:', response.data);
       })
@@ -34,14 +45,6 @@ const TripList = () => {
       });
   };
 
-
-  const handleLogout = () => {
-    localStorage.clear();
-  }
-  /////////////////////////////////////////////////////////////
-
-
-  //COM ERRO
   const loadViajante = (tripId) => {
     // Faz a requisição para obter a lista de viajantes para a viagem específica
     axios.get(`http://localhost:3001/tripviajantes/${tripId}`)
@@ -86,7 +89,7 @@ const TripList = () => {
             Quero me juntar!
           </button>
         </div>
-      ))};
+      ))}
     </div>
   );
 };

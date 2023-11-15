@@ -1,82 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import axios from 'axios';
 import "./App.css";
 
-const CreateTrip = () => {
-  const [dataInicio, setDataInicio] = useState('');
-  const [dataFim, setDataFim] = useState('');
-  const [país, setPais] = useState('');
-  const [cidade, setCidade] = useState('');
-  const [localHospedagem, setLocalHospedagem] = useState('');
-
-
-  const initialValues = {
-    dataInicio: '',
-    dataFim: '',
-    país: '',
-    cidade: '',
-    localHospedagem: '',
-  };
-
-  const handleCreateTrip = async () => {
+function CreateTrip() {
+  const handleCreateTrip = (values) => {
     const criador = localStorage.getItem('userId');
     try {
-      const response = await axios.post("http://localhost:3001/trips", {
-        data_inicio: dataInicio,
-        data_fim: dataFim,
+      axios.post("http://localhost:3001/trips", {
+        data_inicio: values.dataInicio,
+        data_fim: values.dataFim,
         criador: criador,
-        país: país,
-        cidade: cidade,
-        local_hospedagem: localHospedagem,
+        país: values.país,
+        cidade: values.cidade,
+        local_hospedagem: values.localHospedagem,
       });
-      // Lidar com a resposta conforme necessário (redirecionar, exibir mensagem, etc.)
+      handleReload();
+      console.log(localStorage.getItem('userId'));
     } catch (error) {
       console.error('Erro ao criar viagem:', error);
-      // Lidar com o erro conforme necessário (exibir mensagem de erro, etc.)
     }
   };
+
+  const handleReload = () => {
+    window.location.reload();
+  }
 
   return (
     <div className="container">
       <h1>Criar Viagem</h1>
       <Formik
-      initialValues={initialValues}
+      initialValues={{}}
       onSubmit={handleCreateTrip}
       >
         <Form className="login-form">
-            <div className="form-field">
-                <label>Data de Início:</label>
-                <input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
+            <div className="login-form-group">
+              <label>Data de Início:</label>
+              <Field name="dataInicio" className="form-field" placeholder="Data de Inicio"/>
+              <ErrorMessage component="span" name="dataInicio" className="form-error"></ErrorMessage>
+            </div>
+            <div className="login-form-group">
+              <label>Data de Fim:</label>
+              <Field name="dataFim" className="form-field" placeholder="Data de Fim"/>
+              <ErrorMessage component="span" name="dataFim" className="form-error"></ErrorMessage>
+            </div>
+            <div className="login-form-group">
+              <label>País:</label>
+              <Field name="país" className="form-field" placeholder="País"/>
+              <ErrorMessage component="span" name="país" className="form-error"></ErrorMessage>
+            </div>
+            <div className="login-form-group">
+              <label>Cidade:</label>
+              <Field name="cidade" className="form-field" placeholder="Cidade"/>
+              <ErrorMessage component="span" name="cidade" className="form-error"></ErrorMessage>
+            </div>
+            <div className="login-form-group">
+              <label>Local Hospedagem:</label>
+              <Field name="localHospedagem" className="form-field" placeholder="Local Hospedagem"/>
+              <ErrorMessage component="span" name="localHospedagem" className="form-error"></ErrorMessage>
             </div>
 
-            <div className="form-field">
-                <label>Data de Fim:</label>
-                <input type="date" value={dataFim} onChange={(e) => setDataFim(e.target.value)} />
-            </div>
-
-            <div className="form-field">
-                <label>País:</label>
-                <input type="text" value={país} onChange={(e) => setPais(e.target.value)} />
-            </div>
-
-            <div className="form-field" >
-                <label >Cidade:</label>
-                <input type="text" value={cidade} onChange={(e) => setCidade(e.target.value)} />
-            </div>
-
-            <div className="form-field">
-                <label>Local de Hospedagem:</label>
-                <input type="text" value={localHospedagem} onChange={(e) => setLocalHospedagem(e.target.value)} />
-            </div>
-
-            <button type="submit">Criar Viagem</button>
+            <button className="button" type="submit">Cadastrar Viagem</button>
         </Form>
       </Formik>
-      
-      
-
-      
     </div>
   );
 };

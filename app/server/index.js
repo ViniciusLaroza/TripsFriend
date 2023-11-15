@@ -14,7 +14,12 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/trips", (req, res) => {
-    const { data_inicio, data_fim, criador, país, cidade, local_hospedagem} = req.body;
+    const data_inicio = req.body.data_inicio;
+    const data_fim = req.body.data_fim;
+    const criador = req.body.criador;
+    const país = req.body.país;
+    const cidade = req.body.cidade;
+    const local_hospedagem = req.body.local_hospedagem;
 
     db.query("INSERT INTO trip (data_inicio, data_fim, criador, país, cidade, local_hospedagem) VALUES (?, ?, ?, ?, ?, ?)",[data_inicio, data_fim, criador, país, cidade, local_hospedagem],
     (err, result) => {
